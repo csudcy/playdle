@@ -95,27 +95,27 @@ body {
 }
 
 .play {
-  background-image: url("/assets/svg/play.svg");
+  background-image: url("../assets/svg/play.svg");
   background-repeat: no-repeat;
 }
 
 .pause {
-  background-image: url("/assets/svg/pause.svg");
+  background-image: url("../assets/svg/pause.svg");
   background-repeat: no-repeat;
 }
 
 .next {
-  background-image: url("/assets/svg/next.svg");
+  background-image: url("../assets/svg/next.svg");
   background-repeat: no-repeat;
 }
 
 .add {
-  background-image: url("/assets/svg/plus.svg");
+  background-image: url("../assets/svg/plus.svg");
   background-repeat: no-repeat;
 }
 
 .reveal {
-  background-image: url("/assets/svg/eye.svg");
+  background-image: url("../assets/svg/eye.svg");
   background-repeat: no-repeat;
 }
 
