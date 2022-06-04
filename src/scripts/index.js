@@ -10,7 +10,6 @@ const image = document.querySelector(".t_art")
 const Name = document.querySelector(".t_name")
 const total_duration = document.querySelector("#ttl")
 const current_duration = document.querySelector("#cur")
-const likeTrack = document.querySelector("#likeTrack")
 const track_artists = document.querySelector(".t_artists")
 const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token")
 
@@ -49,7 +48,7 @@ const put_player = (uri) => {
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-    const player = new Spotify.Player({name: "MySpotify", getOAuthToken: cb => {cb(token)}})
+    const player = new Spotify.Player({name: "Playdle", getOAuthToken: cb => {cb(token)}})
     
     player.addListener("ready", ({ device_id }) => {
         fetch(`https://api.spotify.com/v1/me/player?access_token=${token}`,
@@ -96,53 +95,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     Slider.addEventListener("change", () => {
         current_duration.textContent = msToMinSec(Slider.value);player.seek(Slider.value)
     })
-
-    likeTrack.addEventListener("click", () => {
-        player.getCurrentState().then(res => {
-            if (likeTrack.getAttribute("liked") == "true") {
-                fetch(`https://api.spotify.com/v1/me/tracks?ids=${res.track_window.current_track.id}`,
-                    {
-                        method : "DELETE",
-                        headers : {
-                            "Accept" : "application/json",
-                            "Content-Type" : "application/json",
-                            "Authorization" : `Bearer ${token}`
-                        }
-                    }).finally(
-                        likeTrack.setAttribute("liked", "false")
-                    )
-            }
-            else {
-                fetch(`https://api.spotify.com/v1/me/tracks?ids=${res.track_window.current_track.id}`,
-                    {
-                        method : "PUT",
-                        headers : {
-                            "Accept" : "application/json",
-                            "Content-Type" : "application/json",
-                            "Authorization" : `Bearer ${token}`
-                        }
-                    }).finally(
-                        likeTrack.setAttribute("liked", "true")
-                    )
-                }
-            })
-        })
     
     player.addListener("player_state_changed", ({paused, duration, track_window: { current_track }}) => {
-        fetch(`https://api.spotify.com/v1/me/tracks/contains?ids=${current_track.id}`,
-            {
-                method : "GET",
-                headers : {
-                    "Accept" : "application/json",
-                    "Content-Type" : "application/json",
-                    "Authorization" : `Bearer ${token}`
-                }
-            }
-        ).then(chunk => chunk.json()).then(res => {
-            if (res[0] === false) likeTrack.setAttribute("liked", "false")
-            else likeTrack.setAttribute("liked", "true")
-        })
-
         if (paused === true) tooglePlay.className = "play"
         else {
             tooglePlay.className = "pause"
