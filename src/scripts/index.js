@@ -26,6 +26,7 @@ if (token === null) {
     ];
 
     window.location.replace(`https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT}&show_dialog=true&scope=${SCOPES.join(" ")}`)
+// TODO: Store token to local storage? Only valid for an hour so only really useful for dev...
 // } else {
 //     window.history.pushState({}, "", "/")
 }
