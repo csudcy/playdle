@@ -1,0 +1,17 @@
+{
+    "name" : "MySpotify",
+    "short_name" : "MySpotify",
+    "display" : "standalone",
+    "start_url": "/",
+    "description": "A Web-based music player",
+    "theme_color": "#000000",
+    "background_color": "#000000",
+    "orientation": "any",
+    "lang" : "en",
+    "icons": [
+        {
+          "src": "/assets/images/icon.png",
+          "sizes": "512x512"
+        }
+    ]
+}
