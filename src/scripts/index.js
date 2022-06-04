@@ -21,7 +21,7 @@ const trackPosition = document.querySelector("#trackPosition")
 const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token")
 if (token === null) {
     const CLIENT_ID = "49ef02f611cf458e8a5dd8030cb5b7b9";
-    const REDIRECT = "http://localhost:8000/";
+    const REDIRECT = `${window.location.origin}${window.location.pathname}`;
     const SCOPES = [
         // "app-remote-control",
         "streaming",
