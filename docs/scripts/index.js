@@ -16,10 +16,10 @@ if (token === null) {
         // "user-library-modify",
     ];
 
-    window.location.replace(`https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT}&show_dialog=true&scope=${SCOPES.join(" ")}`)
-// TODO: Store token to local storage? Only valid for an hour so only really useful for dev...
-// } else {
-//     window.history.pushState({}, "", "/")
+    window.location.replace(`https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT}&scope=${SCOPES.join(" ")}`)
+} else {
+    // Remove token from URL
+    window.history.pushState({}, "", window.location.pathname)
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
@@ -140,9 +140,9 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     
     const nextTrackClick = () => {
         // Hide track info
-        trackArtist.style.display = 'none';
-        trackImage.style.display = 'none';
-        trackName.style.display = 'none';
+        trackArtist.style.opacity = '0';
+        trackImage.style.opacity = '0';
+        trackName.style.opacity = '0';
 
         // Move to next track
         player.nextTrack().then(() => {
@@ -177,9 +177,9 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         game_state = MAX_GAME_STATE + 1;
         setDuration(track_duration);
         updateWidth(progressEnabled, track_duration);
-        trackArtist.style.display = '';
-        trackImage.style.display = '';
-        trackName.style.display = '';
+        trackArtist.style.opacity = '';
+        trackImage.style.opacity = '';
+        trackName.style.opacity = '';
 
         playFromStart();
     })

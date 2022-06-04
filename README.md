@@ -14,10 +14,9 @@ Then load http://localhost:8000
 
 
 ## Todo
-* Deploy
-* Choose playlist/album
 * Bug: Sometimes next track doesn't move next
 
 Later:
 * Guess
 * Keep score
+* Choose playlist/album (use Spotify for now)

@@ -22,9 +22,9 @@
 </head>
 <body>
     <div class="player center">
-        <img style="display: none;" class="trackImage" />
-        <div style="display: none;" class="trackName"></div>
-        <div style="display: none;" class="trackArtist"></div>
+        <img style="opacity: 0;" class="trackImage" />
+        <div style="opacity: 0;" class="trackName">Name</div>
+        <div style="opacity: 0;" class="trackArtist">Artists</div>
         <div class="time_update row">
             <div id="trackPosition">0:00</div>
             <div class="progressBar">
@@ -38,6 +38,11 @@
             <div class="add" id="addTime"></div>
             <div class="reveal" id="revealTrack"></div>
             <div class="next" id="nextTrack"></div>
+        </div>
+        <div class="tip">
+            <a href="https://open.spotify.com/" target="_blank" rel="noreferrer noopener">
+                💡 Use Spotify to choose a playlist or album to play through!
+            </a>
         </div>
     </div>
     <script type="module" src="scripts/index.js"></script>

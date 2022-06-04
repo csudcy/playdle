@@ -139,3 +139,21 @@ body {
 .progressPosition {
   background-color: lightgreen;
 }
+
+.tip {
+  margin-top: 10px;
+}
+
+a:link, a:visited {
+  background-color: #121;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+a:hover, a:active {
+  background-color: #232;
+}
