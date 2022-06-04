@@ -14,14 +14,9 @@ Then load http://localhost:8000
 
 
 ## Todo
-
-* Buttons:
-  * Skip
-  * Reveal answer
-* Show how long will play
-* Hide details while playing
-* Stop & skip to start at time limit
-* Replace slider with progress bar
+* Deploy
+* Choose playlist/album
+* Bug: Sometimes next track doesn't move next
 
 Later:
 * Guess

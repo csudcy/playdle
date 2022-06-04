@@ -5,8 +5,9 @@ window.navigator.standalone // https://developer.apple.com/library/archive/docum
 // Get control elements
 const addTime = document.querySelector("#addTime")
 const nextTrack = document.querySelector("#nextTrack")
+const progressEnabled = document.querySelector(".progressEnabled")
+const progressPosition = document.querySelector(".progressPosition")
 const revealTrack = document.querySelector("#revealTrack")
-const Slider = document.querySelector(".time_update input[type=range]")
 const tooglePlay = document.querySelector("#togglePlay")
 
 // Get display elements
@@ -36,24 +37,38 @@ if (token === null) {
 //     window.history.pushState({}, "", "/")
 }
 
+// Game state
+const GAME_STATES = [
+    1000,
+    2000,
+    4000,
+    8000,
+    16000,
+    30000,
+];
+const MAX_GAME_STATE = GAME_STATES.length - 1;
+const MAX_DURATION = GAME_STATES[MAX_GAME_STATE];
+let game_state = 0;
+let max_duration = 1;
+let track_duration = 1;
+
 const msToMinSec = (ms) => {
     return `${Math.floor(ms / 60000)}:${Math.floor((ms % 60000) / 1000).toString().padStart(2, "0")}`
+}
+
+const updateWidth = (element, value) => {
+    const done_pc = 100 * value / max_duration;
+    element.style.width = `${done_pc}%`;
+}
+
+const setDuration = (value) => {
+    max_duration = value;
+    trackDuration.textContent = msToMinSec(value)
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
     const player = new Spotify.Player({name: "Playdle", getOAuthToken: cb => {cb(token)}})
 
-    const GAME_STATES = [
-        1,
-        2,
-        4,
-        8,
-        16,
-        30,
-    ];
-    const MAX_GAME_STATE = GAME_STATES.length - 1;
-    let game_state = 0;
-    
     // Bind player events
     player.addListener("ready", ({ device_id }) => {
         fetch(`https://api.spotify.com/v1/me/player?access_token=${token}`,
@@ -73,21 +88,18 @@ window.onSpotifyWebPlaybackSDKReady = () => {
                 if (!state) return;
 
                 trackPosition.textContent = msToMinSec(state.position)
-                Slider.value = state.position
+                updateWidth(progressPosition, state.position)
 
-                if (!state.paused) {
-                    // Check game state
-                    const max_duration = GAME_STATES[game_state];
-                    if (max_duration !== null) {
-                        // Enfore max duration
-                        if (state.position >= max_duration * 1000) {
-                            player.pause();
-                            player.seek(0);
-                        }
-                    }
+                // Enforce max duration
+                if (state.position >= GAME_STATES[game_state]) {
+                    player.pause();
+                    player.seek(0);
                 }
             })
         }, 200)
+
+        // Start the first game!
+        nextTrackClick();
     })
     
     player.addListener("not_ready", ({ device_id }) => {
@@ -114,10 +126,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
             trackName.textContent = current_track["name"]
             trackImage.src = current_track["album"]["images"][2]["url"]
-            Slider.setAttribute("max", duration)
-            trackDuration.textContent = msToMinSec(duration)
+            track_duration = duration;
         }
-        
     })
     player.connect()
 
@@ -126,26 +136,25 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         player.togglePlay()
     })
     
-    nextTrack.addEventListener("click", () => {
-        // Reset game state & hide track info
-        game_state = 0;
+    const nextTrackClick = () => {
+        // Hide track info
         trackArtist.style.display = 'none';
         trackImage.style.display = 'none';
         trackName.style.display = 'none';
 
         // Move to next track
-        player.nextTrack()
-    })
-
-    Slider.addEventListener("change", () => {
-        trackPosition.textContent = msToMinSec(Slider.value);player.seek(Slider.value)
-    })
+        player.nextTrack().then(() => {
+            // Reset game state
+            game_state = 0;
+            setDuration(MAX_DURATION);
+            updateWidth(progressEnabled, GAME_STATES[game_state])
+        })
+    }
+    nextTrack.addEventListener("click", nextTrackClick);
 
     const playFromStart = () => {
         player.getCurrentState().then(state => {
-            if (!state) return;
-
-            if (state.paused) {
+            if (state && state.paused) {
                 player.seek(0);
                 player.togglePlay();
             }
@@ -157,12 +166,15 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         if (!GAME_STATES[game_state]) {
             game_state = MAX_GAME_STATE;
         }
+        updateWidth(progressEnabled, GAME_STATES[game_state])
 
         playFromStart();
     })
 
     revealTrack.addEventListener("click", () => {
         game_state = MAX_GAME_STATE + 1;
+        setDuration(track_duration);
+        updateWidth(progressEnabled, track_duration);
         trackArtist.style.display = '';
         trackImage.style.display = '';
         trackName.style.display = '';

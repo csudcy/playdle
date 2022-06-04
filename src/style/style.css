@@ -89,37 +89,6 @@ body {
   font-size: 12px;
 }
 
-.time_update input[type=range] {
-  -webkit-appearance: none;
-  height: 3.5px;
-  width: 200px;
-  background-color: #bfbfbf;
-  border-radius: 50px;
-  margin: 0 10px 0 10px;
-}
-
-.time_update input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 15px;
-  width: 15px;
-  background-color: #ffffff;
-  border-radius: 50px;
-  cursor: pointer;
-  border: none;
-  box-shadow: none;
-}
-
-.time_update input[type=range]::-moz-range-thumb {
-  -webkit-appearance: none;
-  height: 15px;
-  width: 15px;
-  background-color: #ffffff;
-  border-radius: 50px;
-  cursor: pointer;
-  border: none;
-  box-shadow: none;
-}
-
 .controls div:hover {
   opacity: 1;
   transform: scale(1.05);
@@ -148,4 +117,25 @@ body {
 .reveal {
   background-image: url("/assets/svg/eye.svg");
   background-repeat: no-repeat;
+}
+
+.progressBar {
+  border: 1px solid white;
+  flex-grow: 1;
+  height: 10px;
+  margin: 0px 10px;
+  position: relative;
+}
+
+.progressBar div {
+  height: 100%;
+  position: absolute;
+}
+
+.progressEnabled {
+  background-color: lightgrey;
+}
+
+.progressPosition {
+  background-color: lightgreen;
 }
