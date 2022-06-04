@@ -2,21 +2,6 @@ import "https://sdk.scdn.co/spotify-player.js"
 
 window.navigator.standalone // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 
-// Get control elements
-const addTime = document.querySelector("#addTime")
-const nextTrack = document.querySelector("#nextTrack")
-const progressEnabled = document.querySelector(".progressEnabled")
-const progressPosition = document.querySelector(".progressPosition")
-const revealTrack = document.querySelector("#revealTrack")
-const tooglePlay = document.querySelector("#togglePlay")
-
-// Get display elements
-const trackArtist = document.querySelector(".trackArtist")
-const trackDuration = document.querySelector("#trackDuration")
-const trackImage = document.querySelector(".trackImage")
-const trackName = document.querySelector(".trackName")
-const trackPosition = document.querySelector("#trackPosition")
-
 // Check for auth
 const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token")
 if (token === null) {
@@ -37,37 +22,54 @@ if (token === null) {
 //     window.history.pushState({}, "", "/")
 }
 
-// Game state
-const GAME_STATES = [
-    1000,
-    2000,
-    4000,
-    8000,
-    16000,
-    30000,
-];
-const MAX_GAME_STATE = GAME_STATES.length - 1;
-const MAX_DURATION = GAME_STATES[MAX_GAME_STATE];
-let game_state = 0;
-let max_duration = 1;
-let track_duration = 1;
-
-const msToMinSec = (ms) => {
-    return `${Math.floor(ms / 60000)}:${Math.floor((ms % 60000) / 1000).toString().padStart(2, "0")}`
-}
-
-const updateWidth = (element, value) => {
-    const done_pc = 100 * value / max_duration;
-    element.style.width = `${done_pc}%`;
-}
-
-const setDuration = (value) => {
-    max_duration = value;
-    trackDuration.textContent = msToMinSec(value)
-}
-
 window.onSpotifyWebPlaybackSDKReady = () => {
+    // Get control elements
+    const addTime = document.querySelector("#addTime")
+    const nextTrack = document.querySelector("#nextTrack")
+    const progressEnabled = document.querySelector(".progressEnabled")
+    const progressPosition = document.querySelector(".progressPosition")
+    const revealTrack = document.querySelector("#revealTrack")
+    const tooglePlay = document.querySelector("#togglePlay")
+
+    // Get display elements
+    const trackArtist = document.querySelector(".trackArtist")
+    const trackDuration = document.querySelector("#trackDuration")
+    const trackImage = document.querySelector(".trackImage")
+    const trackName = document.querySelector(".trackName")
+    const trackPosition = document.querySelector("#trackPosition")
+
+    // Game state
+    const GAME_STATES = [
+        1000,
+        2000,
+        4000,
+        8000,
+        16000,
+        30000,
+    ];
+    const MAX_GAME_STATE = GAME_STATES.length - 1;
+    const MAX_DURATION = GAME_STATES[MAX_GAME_STATE];
+    let game_state = 0;
+    let max_duration = 1;
+    let track_duration = 1;
+
+    // Init the web player
     const player = new Spotify.Player({name: "Playdle", getOAuthToken: cb => {cb(token)}})
+
+    // Helper methods
+    const msToMinSec = (ms) => {
+        return `${Math.floor(ms / 60000)}:${Math.floor((ms % 60000) / 1000).toString().padStart(2, "0")}`
+    }
+
+    const updateWidth = (element, value) => {
+        const done_pc = 100 * value / max_duration;
+        element.style.width = `${done_pc}%`;
+    }
+
+    const setDuration = (value) => {
+        max_duration = value;
+        trackDuration.textContent = msToMinSec(value)
+    }
 
     // Bind player events
     player.addListener("ready", ({ device_id }) => {
