@@ -7,7 +7,7 @@ Started from https://github.com/sijey-praveen/MySpotify/tree/Sijey/MySpotify
 
 Easiest way to run is:
 ```
-cd src
+cd docs
 python3 -m http.server
 ```
 Then load http://localhost:8000
