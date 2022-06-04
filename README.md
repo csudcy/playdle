@@ -21,6 +21,8 @@ Then load http://localhost:8000
 * Show how long will play
 * Hide details while playing
 * Stop & skip to start at time limit
+* Replace slider with progress bar
 
 Later:
 * Guess
+* Keep score

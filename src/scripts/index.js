@@ -2,16 +2,22 @@ import "https://sdk.scdn.co/spotify-player.js"
 
 window.navigator.standalone // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 
-const tooglePlay = document.querySelector("#togglePlay")
-const Slider = document.querySelector(".time_update input[type=range]")
+// Get control elements
+const addTime = document.querySelector("#addTime")
 const nextTrack = document.querySelector("#nextTrack")
-const image = document.querySelector(".t_art")
-const Name = document.querySelector(".t_name")
-const total_duration = document.querySelector("#ttl")
-const current_duration = document.querySelector("#cur")
-const track_artists = document.querySelector(".t_artists")
-const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token")
+const revealTrack = document.querySelector("#revealTrack")
+const Slider = document.querySelector(".time_update input[type=range]")
+const tooglePlay = document.querySelector("#togglePlay")
 
+// Get display elements
+const trackArtist = document.querySelector(".trackArtist")
+const trackDuration = document.querySelector("#trackDuration")
+const trackImage = document.querySelector(".trackImage")
+const trackName = document.querySelector(".trackName")
+const trackPosition = document.querySelector("#trackPosition")
+
+// Check for auth
+const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token")
 if (token === null) {
     const CLIENT_ID = "49ef02f611cf458e8a5dd8030cb5b7b9";
     const REDIRECT = "http://localhost:8000/";
@@ -34,21 +40,18 @@ const msToMinSec = (ms) => {
     return `${Math.floor(ms / 60000)}:${Math.floor((ms % 60000) / 1000).toString().padStart(2, "0")}`
 }
 
-const put_player = (uri) => {
-    fetch(`https://api.spotify.com/v1/me/player/play?access_token=${token}`,
-        {
-            body : JSON.stringify(
-                {
-                    uris: [uri]
-                }
-            ),
-            method: "PUT"
-        }
-    )
-}
-
 window.onSpotifyWebPlaybackSDKReady = () => {
     const player = new Spotify.Player({name: "Playdle", getOAuthToken: cb => {cb(token)}})
+
+    const GAME_STATES = [
+        1,
+        2,
+        4,
+        8,
+        16,
+        30,
+    ]
+    let game_state = 0;
     
     player.addListener("ready", ({ device_id }) => {
         fetch(`https://api.spotify.com/v1/me/player?access_token=${token}`,
@@ -89,31 +92,27 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     })
 
     Slider.addEventListener("change", () => {
-        current_duration.textContent = msToMinSec(Slider.value);player.seek(Slider.value)
+        trackPosition.textContent = msToMinSec(Slider.value);player.seek(Slider.value)
     })
     
     player.addListener("player_state_changed", ({paused, duration, track_window: { current_track }}) => {
-        if (paused === true) tooglePlay.className = "play"
-        else {
+        if (paused === true) {
+            tooglePlay.className = "play"
+        } else {
             tooglePlay.className = "pause"
-            track_artists.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
-            Name.textContent = current_track["name"]
-            image.src = current_track["album"]["images"][2]["url"]
+            trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
+            trackName.textContent = current_track["name"]
+            trackImage.src = current_track["album"]["images"][2]["url"]
             Slider.setAttribute("max", duration)
-            total_duration.textContent = msToMinSec(duration)
+            trackDuration.textContent = msToMinSec(duration)
         }
         
         setInterval(()=> {
             player.getCurrentState().then(state => {
-                current_duration.textContent = msToMinSec(state.position)
-            })
-        }, 1000)
-
-        setInterval(()=> {
-            player.getCurrentState().then(state => {
+                trackPosition.textContent = msToMinSec(state.position)
                 Slider.value = state.position
             })
-        }, 5000)
+        }, 200)
     })
     player.connect()
 }

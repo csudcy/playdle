@@ -48,7 +48,7 @@ body {
   line-height: 30px;
 }
 
-.t_name {
+.trackName {
   font-size: 16px;
   width: 310px;
   white-space: pre;
@@ -56,13 +56,13 @@ body {
   padding: 0 10px;
 }
 
-.t_art {
+.trackImage {
   width: 300px;
   height: 300px;
   margin: 5px;
 }
 
-.t_artists {
+.trackArtist {
   font-size: 14px;
   width: 310px;
   white-space: pre;
