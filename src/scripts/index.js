@@ -5,7 +5,6 @@ window.navigator.standalone // https://developer.apple.com/library/archive/docum
 const tooglePlay = document.querySelector("#togglePlay")
 const Slider = document.querySelector(".time_update input[type=range]")
 const nextTrack = document.querySelector("#nextTrack")
-const previousTrack = document.querySelector("#previousTrack")
 const image = document.querySelector(".t_art")
 const Name = document.querySelector(".t_name")
 const total_duration = document.querySelector("#ttl")
@@ -87,10 +86,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     
     nextTrack.addEventListener("click", () => {
         player.nextTrack()
-    })
-
-    previousTrack.addEventListener("click",() => {
-        player.previousTrack()
     })
 
     Slider.addEventListener("change", () => {
