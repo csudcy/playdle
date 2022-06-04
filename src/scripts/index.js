@@ -50,9 +50,11 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         8,
         16,
         30,
-    ]
+    ];
+    const MAX_GAME_STATE = GAME_STATES.length - 1;
     let game_state = 0;
     
+    // Bind player events
     player.addListener("ready", ({ device_id }) => {
         fetch(`https://api.spotify.com/v1/me/player?access_token=${token}`,
             {
@@ -64,7 +66,28 @@ window.onSpotifyWebPlaybackSDKReady = () => {
                 ),
                 method: "PUT"
             }
-        )
+        );
+
+        setInterval(()=> {
+            player.getCurrentState().then(state => {
+                if (!state) return;
+
+                trackPosition.textContent = msToMinSec(state.position)
+                Slider.value = state.position
+
+                if (!state.paused) {
+                    // Check game state
+                    const max_duration = GAME_STATES[game_state];
+                    if (max_duration !== null) {
+                        // Enfore max duration
+                        if (state.position >= max_duration * 1000) {
+                            player.pause();
+                            player.seek(0);
+                        }
+                    }
+                }
+            })
+        }, 200)
     })
     
     player.addListener("not_ready", ({ device_id }) => {
@@ -83,18 +106,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         console.error(message)
     })
     
-    tooglePlay.addEventListener("click", () => {
-        player.togglePlay()
-    })
-    
-    nextTrack.addEventListener("click", () => {
-        player.nextTrack()
-    })
-
-    Slider.addEventListener("change", () => {
-        trackPosition.textContent = msToMinSec(Slider.value);player.seek(Slider.value)
-    })
-    
     player.addListener("player_state_changed", ({paused, duration, track_window: { current_track }}) => {
         if (paused === true) {
             tooglePlay.className = "play"
@@ -107,12 +118,55 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             trackDuration.textContent = msToMinSec(duration)
         }
         
-        setInterval(()=> {
-            player.getCurrentState().then(state => {
-                trackPosition.textContent = msToMinSec(state.position)
-                Slider.value = state.position
-            })
-        }, 200)
     })
     player.connect()
+
+    // Bind control events
+    tooglePlay.addEventListener("click", () => {
+        player.togglePlay()
+    })
+    
+    nextTrack.addEventListener("click", () => {
+        // Reset game state & hide track info
+        game_state = 0;
+        trackArtist.style.display = 'none';
+        trackImage.style.display = 'none';
+        trackName.style.display = 'none';
+
+        // Move to next track
+        player.nextTrack()
+    })
+
+    Slider.addEventListener("change", () => {
+        trackPosition.textContent = msToMinSec(Slider.value);player.seek(Slider.value)
+    })
+
+    const playFromStart = () => {
+        player.getCurrentState().then(state => {
+            if (!state) return;
+
+            if (state.paused) {
+                player.seek(0);
+                player.togglePlay();
+            }
+        })
+    }
+
+    addTime.addEventListener("click", () => {
+        game_state += 1;
+        if (!GAME_STATES[game_state]) {
+            game_state = MAX_GAME_STATE;
+        }
+
+        playFromStart();
+    })
+
+    revealTrack.addEventListener("click", () => {
+        game_state = MAX_GAME_STATE + 1;
+        trackArtist.style.display = '';
+        trackImage.style.display = '';
+        trackName.style.display = '';
+
+        playFromStart();
+    })
 }
