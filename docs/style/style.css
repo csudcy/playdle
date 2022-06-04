@@ -84,9 +84,21 @@ body {
   height: 35px;
 }
 
+.controls2 i {
+  margin-right: 20px;
+}
+
 .button {
   color: #555;
-  margin: 3px 10px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.button.solid {
+  background-color: #102710;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
 }
 
 .button.enabled {
@@ -94,9 +106,16 @@ body {
   cursor: pointer;
 }
 
-.button.enabled:hover {
+.button.enabled:hover, .button.selected {
   color: #ccc;
-  transform: scale(1.05);
+}
+
+.button.solid:hover {
+  background-color: #232;
+}
+
+.button.selected {
+  color: #ccf;
 }
 
 .progressBar {
@@ -124,16 +143,17 @@ body {
   margin-left: 10px;
 }
 
-a:link, a:visited {
-  background-color: #121;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 10px;
+#searchResults {
+  height: 60vh;
+  overflow: auto;
+  width: 95vw;
 }
 
-a:hover, a:active {
-  background-color: #232;
+#searchResults div, #searchAlbum {
+  margin-right: 10px;
+}
+
+#searchResults img {
+  max-height: 64px;
+  max-width: 64px;
 }

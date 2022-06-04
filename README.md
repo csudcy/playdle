@@ -17,7 +17,6 @@ Then load http://localhost:8000
 * Bug: Sometimes next track doesn't move next
 * Check for premium account?
 * Add logout / change user
-* Choose playlist/album - using spotify & coming back is too hard!
 
 Later:
 * Guess

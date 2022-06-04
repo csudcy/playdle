@@ -46,16 +46,43 @@
             <i id="revealTrack" class="button enabled fa-3x fa-solid fa-eye"></i>
             <i id="nextTrack" class="button enabled fa-3x fa-solid fa-forward"></i>
         </div>
-        <div>
+        <div class="playlistSelect button solid enabled">
             <i class="fa-1x fa-solid fa-list"></i>
             <span id="playlistName">?</span>
         </div>
-        <div class="tip">
-            <a href="https://open.spotify.com/" target="_blank" rel="noreferrer noopener">
-                💡 Use Spotify to choose a playlist or album to play through!
-            </a>
+    </div>
+
+    <div id="searchScreen" class="center" style="display: none;">
+        <div>
+            <h1>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Search
+                <i id="searchClose" class="button enabled fa-solid fa-xmark fa-pull-right"></i>
+            </h1>
+        </div>
+
+        <div>
+            <input id="searchInput" type="text"></input>
+        </div>
+        
+        <div>
+            <span id="searchAlbum" class="button enabled">
+                <i class="fa-solid fa-compact-disc"></i>
+                Album
+            </span>
+            <span id="searchPlaylist" class="button enabled">
+                <i class="fa-solid fa-list"></i>
+                Playlist
+            </span>
+        </div>
+        <div>
+            <h2 id="searchTitle" style="opacity: 0;">"80s rock"</h2>
+            <div id="searchResults" style="opacity: 0;">
+            </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spotify-web-api-js/1.5.2/spotify-web-api.min.js" integrity="sha512-BctYl8DMX/Oz6Y5xdcvA00Irxz78pMLfyutiXl3h4fUT6cNllPKYnm4HhG4p/wJgNAtOs//3EsYO+qkaThXEGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module" src="scripts/index.js"></script>
 </body>
 </html>

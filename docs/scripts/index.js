@@ -23,25 +23,35 @@ if (token === null) {
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-    // Get control elements
+    // Get player control elements
     const addTime = document.querySelector("#addTime")
     const nextTrack = document.querySelector("#nextTrack")
+    const playlistSelect = document.querySelector(".playlistSelect")
     const progressEnabled = document.querySelector("#progressEnabled")
     const progressPosition = document.querySelector("#progressPosition")
     const revealTrack = document.querySelector("#revealTrack")
     const togglePlay = document.querySelector("#togglePlay")
 
-    // Get display elements
+    // Get player display elements
+    const playlistName = document.querySelector("#playlistName")
     const trackArtist = document.querySelector("#trackArtist")
     const trackDuration = document.querySelector("#trackDuration")
     const trackImage = document.querySelector("#trackImage")
     const trackName = document.querySelector("#trackName")
     const trackPosition = document.querySelector("#trackPosition")
-    const playlistName = document.querySelector("#playlistName")
+
+    // Get search elements
+    const searchAlbum = document.querySelector("#searchAlbum")
+    const searchClose = document.querySelector("#searchClose")
+    const searchInput = document.querySelector("#searchInput")
+    const searchPlaylist = document.querySelector("#searchPlaylist")
+    const searchResults = document.querySelector("#searchResults")
+    const searchTitle = document.querySelector("#searchTitle")
 
     // Get screen elements
     const loadingScreen = document.querySelector("#loadingScreen")
     const playerScreen = document.querySelector("#playerScreen")
+    const searchScreen = document.querySelector("#searchScreen")
 
     // Game state
     const GAME_STATES = [
@@ -59,8 +69,13 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     let max_duration = 1;
     let track_duration = 1;
 
-    // Init the web player
+    const searchTypeAlbum = "album";
+    const searchTypePlaylist = "playlist";
+
+    // Init the APIs
     const player = new Spotify.Player({name: "Playdle", getOAuthToken: cb => {cb(token)}})
+    const spotifyApi = new SpotifyWebApi();
+    spotifyApi.setAccessToken(token);
 
     // Helper methods
     const msToMinSec = (ms) => {
@@ -114,6 +129,12 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         })
     }
 
+    const showScreen = (screen) => {
+        loadingScreen.style.display = screen == loadingScreen ? '' : 'none';
+        playerScreen.style.display = screen == playerScreen ? '' : 'none';
+        searchScreen.style.display = screen == searchScreen ? '' : 'none';
+    };
+
     // Bind player events
     player.addListener("ready", ({ device_id }) => {
         fetch(`https://api.spotify.com/v1/me/player?access_token=${token}`,
@@ -145,8 +166,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
         // Show the game screen
         setGameState(0);
-        loadingScreen.style.display = 'none';
-        playerScreen.style.display = '';
+        showScreen(playerScreen);
     })
     
     player.addListener("not_ready", ({ device_id }) => {
@@ -211,4 +231,75 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         setGameState(MAX_GAME_STATE + 1);
         playFromStart();
     })
+
+    playlistSelect.addEventListener("click", () => {
+        showScreen(searchScreen);
+    })
+
+    searchAlbum.addEventListener("click", () => {
+        search(searchTypeAlbum);
+    })
+
+    searchClose.addEventListener("click", () => {
+        showScreen(playerScreen);
+    })
+
+    searchPlaylist.addEventListener("click", () => {
+        search(searchTypePlaylist);
+    })
+
+    searchResults.addEventListener("click", (event) => {
+        let element = event.target;
+        while (!element.dataset.uri) {
+            element = element.parentNode;
+        }
+        const uri = element.dataset.uri;
+        spotifyApi.play({"context_uri": uri}).then(() => {
+            spotifyApi.setShuffle(true);
+        });
+
+        showScreen(playerScreen);
+    })
+
+    const search = (searchType) => {
+        const query = searchInput.value;
+        if (!query) return;
+
+        if (searchType == searchTypeAlbum) {
+            searchAlbum.classList.add("selected");
+            searchPlaylist.classList.remove("selected");
+        } else {
+            searchAlbum.classList.remove("selected");
+            searchPlaylist.classList.add("selected");
+        }
+
+        searchTitle.textContent = `"${query}"`;
+        searchResults.innerHTML = '<i class="fa-solid fa-hourglass-empty"></i>';
+        searchTitle.style.opacity = 1;
+        searchResults.style.opacity = 1;
+        spotifyApi.search(query, [searchType]).then((response) => {
+            const results = response[`${searchType}s`];
+            if (results.items.length == 0) {
+                searchResults.textContent = "No results!";
+            } else {
+                const resultRows = results.items.map((item) => {
+                    let creator;
+                    if (item.owner) {
+                        creator = item.owner.display_name;
+                    } else {
+                        creator = item.artists.map(artist => {return artist.name}).join(", ");
+                    }
+                    const image = item.images[item.images.length - 1].url;
+                    return `<div class="button solid enabled row" data-uri="${item.uri}">
+                        <img src="${image}"/>
+                        <span style="flex-grow: 1;">
+                            <h3>${item.name}</h3>
+                            by ${creator}
+                        <span>
+                    </div>`;
+                });
+                searchResults.innerHTML = resultRows.join("\n");
+            }
+        })
+    }
 }
