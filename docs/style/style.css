@@ -78,10 +78,10 @@ body {
 .controls div {
   width: 45px;
   height: 45px;
-  cursor: pointer;
   fill: #ffffff;
   margin: 3px 10px;
-  opacity: 0.5;
+  background-repeat: no-repeat; 
+  opacity: 0.25;
 }
 
 .time_update {
@@ -89,34 +89,34 @@ body {
   font-size: 12px;
 }
 
-.controls div:hover {
+.controls div.enabled {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.controls div.enabled:hover {
   opacity: 1;
   transform: scale(1.05);
 }
 
 .play {
   background-image: url("../assets/svg/play.svg");
-  background-repeat: no-repeat;
 }
 
 .pause {
   background-image: url("../assets/svg/pause.svg");
-  background-repeat: no-repeat;
 }
 
 .next {
   background-image: url("../assets/svg/next.svg");
-  background-repeat: no-repeat;
 }
 
 .add {
   background-image: url("../assets/svg/plus.svg");
-  background-repeat: no-repeat;
 }
 
 .reveal {
   background-image: url("../assets/svg/eye.svg");
-  background-repeat: no-repeat;
 }
 
 .progressBar {

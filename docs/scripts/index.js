@@ -29,7 +29,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     const progressEnabled = document.querySelector(".progressEnabled")
     const progressPosition = document.querySelector(".progressPosition")
     const revealTrack = document.querySelector("#revealTrack")
-    const tooglePlay = document.querySelector("#togglePlay")
+    const togglePlay = document.querySelector("#togglePlay")
 
     // Get display elements
     const trackArtist = document.querySelector(".trackArtist")
@@ -40,6 +40,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
     // Game state
     const GAME_STATES = [
+        0,
         1000,
         2000,
         4000,
@@ -71,6 +72,52 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         trackDuration.textContent = msToMinSec(value)
     }
 
+    const setGameState = (new_game_state) => {
+        game_state = new_game_state;
+
+        // Update addTime enabled state
+        if (game_state >= MAX_GAME_STATE) {
+            addTime.classList.remove("enabled");
+        } else {
+            addTime.classList.add("enabled");
+        }
+
+        if (game_state > MAX_GAME_STATE) {
+            // Game is over
+            setDuration(track_duration);
+            updateWidth(progressEnabled, track_duration);
+
+            trackArtist.style.opacity = '';
+            trackImage.style.opacity = '';
+            trackName.style.opacity = '';
+        } else {
+            setDuration(MAX_DURATION);
+            updateWidth(progressEnabled, GAME_STATES[game_state])
+
+            trackArtist.style.opacity = '0';
+            trackImage.style.opacity = '0';
+            trackName.style.opacity = '0';
+        }
+    }
+    
+    const nextTrackClick = () => {
+        setGameState(0);
+        player.nextTrack().then(() => {
+            setTimeout(() => {
+                setGameState(1);
+            }, 400);
+        });
+    }
+
+    const playFromStart = () => {
+        player.getCurrentState().then(state => {
+            if (state && state.paused) {
+                player.seek(0)
+                player.resume();
+            }
+        })
+    }
+
     // Bind player events
     player.addListener("ready", ({ device_id }) => {
         fetch(`https://api.spotify.com/v1/me/player?access_token=${token}`,
@@ -93,7 +140,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
                 updateWidth(progressPosition, state.position)
 
                 // Enforce max duration
-                if (state.position >= GAME_STATES[game_state]) {
+                if (game_state > 0 && state.position >= GAME_STATES[game_state]) {
                     player.pause();
                     player.seek(0);
                 }
@@ -122,9 +169,9 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     
     player.addListener("player_state_changed", ({paused, duration, track_window: { current_track }}) => {
         if (paused === true) {
-            tooglePlay.className = "play"
+            togglePlay.className = "play enabled"
         } else {
-            tooglePlay.className = "pause"
+            togglePlay.className = "pause enabled"
             trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
             trackName.textContent = current_track["name"]
             trackImage.src = current_track["album"]["images"][2]["url"]
@@ -134,53 +181,21 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     player.connect()
 
     // Bind control events
-    tooglePlay.addEventListener("click", () => {
+    togglePlay.addEventListener("click", () => {
         player.togglePlay()
     })
-    
-    const nextTrackClick = () => {
-        // Hide track info
-        trackArtist.style.opacity = '0';
-        trackImage.style.opacity = '0';
-        trackName.style.opacity = '0';
 
-        // Move to next track
-        player.nextTrack().then(() => {
-            // Reset game state
-            game_state = 0;
-            setDuration(MAX_DURATION);
-            updateWidth(progressEnabled, GAME_STATES[game_state])
-        })
-    }
     nextTrack.addEventListener("click", nextTrackClick);
 
-    const playFromStart = () => {
-        player.getCurrentState().then(state => {
-            if (state && state.paused) {
-                player.seek(0);
-                player.togglePlay();
-            }
-        })
-    }
-
     addTime.addEventListener("click", () => {
-        game_state += 1;
-        if (!GAME_STATES[game_state]) {
-            game_state = MAX_GAME_STATE;
+        if (game_state < MAX_GAME_STATE) {
+            setGameState(game_state + 1);
+            playFromStart();
         }
-        updateWidth(progressEnabled, GAME_STATES[game_state])
-
-        playFromStart();
     })
 
     revealTrack.addEventListener("click", () => {
-        game_state = MAX_GAME_STATE + 1;
-        setDuration(track_duration);
-        updateWidth(progressEnabled, track_duration);
-        trackArtist.style.opacity = '';
-        trackImage.style.opacity = '';
-        trackName.style.opacity = '';
-
+        setGameState(MAX_GAME_STATE + 1);
         playFromStart();
     })
 }
