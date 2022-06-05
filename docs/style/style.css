@@ -39,6 +39,10 @@ body {
   line-height: 30px;
 }
 
+.center>div {
+  margin-bottom: 10px;
+}
+
 .loadingScreen {
   font-size: 10em;
 }
@@ -60,7 +64,6 @@ body {
 .trackImage {
   width: 300px;
   height: 300px;
-  margin: 5px;
 }
 
 .trackArtist {
@@ -79,20 +82,19 @@ body {
 
 .controls2 {
   height: 35px;
-  margin-top: 5px;
 }
 
-.controls2 i {
+.button {
   color: #555;
   margin: 3px 10px;
 }
 
-.controls2 i.enabled {
+.button.enabled {
   color: #999;
   cursor: pointer;
 }
 
-.controls2 i.enabled:hover {
+.button.enabled:hover {
   color: #ccc;
   transform: scale(1.05);
 }
@@ -120,10 +122,6 @@ body {
 
 #playlistName {
   margin-left: 10px;
-}
-
-.tip {
-  margin-top: 10px;
 }
 
 a:link, a:visited {

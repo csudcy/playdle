@@ -27,9 +27,11 @@
     </div>
 
     <div class="playerScreen center" style="display: none;">
-        <img style="opacity: 0;" class="trackImage" />
-        <div style="opacity: 0;" class="trackName">Name</div>
-        <div style="opacity: 0;" class="trackArtist">Artists</div>
+        <div>
+            <img style="opacity: 0;" class="trackImage" />
+            <div style="opacity: 0;" class="trackName">Name</div>
+            <div style="opacity: 0;" class="trackArtist">Artists</div>
+        </div>
         <div class="time_update row">
             <div id="trackPosition">0:00</div>
             <div class="progressBar">
@@ -39,12 +41,12 @@
             <div id="trackDuration">0:00</div>    
         </div>
         <div class="controls2 row">
-            <i class="enabled fa-3x fa-solid fa-play" id="togglePlay"></i>
-            <i class="enabled fa-3x fa-solid fa-plus" id="addTime"></i>
-            <i class="enabled fa-3x fa-solid fa-eye" id="revealTrack"></i>
-            <i class="enabled fa-3x fa-solid fa-forward" id="nextTrack"></i>
+            <i class="button enabled fa-3x fa-solid fa-play" id="togglePlay"></i>
+            <i class="button enabled fa-3x fa-solid fa-plus" id="addTime"></i>
+            <i class="button enabled fa-3x fa-solid fa-eye" id="revealTrack"></i>
+            <i class="button enabled fa-3x fa-solid fa-forward" id="nextTrack"></i>
         </div>
-        <div class="tip">
+        <div>
             <i class="fa-1x fa-solid fa-list"></i>
             <span id="playlistName">?</span>
         </div>
