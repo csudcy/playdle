@@ -170,10 +170,13 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     
     player.addListener("player_state_changed", (state) => {
         if (state.paused === true) {
-            togglePlay.className = "play enabled"
+            togglePlay.classList.remove('fa-pause');
+            togglePlay.classList.add('fa-play');
         } else {
+            togglePlay.classList.remove('fa-play');
+            togglePlay.classList.add('fa-pause');
+
             const current_track = state.track_window.current_track;
-            togglePlay.className = "pause enabled"
             trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
             trackName.textContent = current_track.name
             trackImage.src = current_track.album.images[2].url

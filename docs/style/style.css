@@ -76,47 +76,24 @@ body {
   font-size: 12px;
 }
 
-.controls {
-  color: #bfbfbf;
+.controls2 {
+  height: 35px;
+  margin-top: 5px;
 }
 
-.controls div {
-  width: 45px;
-  height: 45px;
-  fill: #ffffff;
+.controls2 i {
+  color: #555;
   margin: 3px 10px;
-  background-repeat: no-repeat; 
-  opacity: 0.25;
 }
 
-.controls div.enabled {
+.controls2 i.enabled {
+  color: #999;
   cursor: pointer;
-  opacity: 0.6;
 }
 
-.controls div.enabled:hover {
-  opacity: 1;
+.controls2 i.enabled:hover {
+  color: #ccc;
   transform: scale(1.05);
-}
-
-.play {
-  background-image: url("../assets/svg/play.svg");
-}
-
-.pause {
-  background-image: url("../assets/svg/pause.svg");
-}
-
-.next {
-  background-image: url("../assets/svg/next.svg");
-}
-
-.add {
-  background-image: url("../assets/svg/plus.svg");
-}
-
-.reveal {
-  background-image: url("../assets/svg/eye.svg");
 }
 
 .progressBar {
