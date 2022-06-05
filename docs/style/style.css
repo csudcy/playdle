@@ -157,3 +157,7 @@ body {
   max-height: 64px;
   max-width: 64px;
 }
+
+#loginButton {
+  font-size: 2em;
+}

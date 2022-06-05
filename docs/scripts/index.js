@@ -2,21 +2,21 @@ import "https://sdk.scdn.co/spotify-player.js"
 
 window.navigator.standalone // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 
+const CLIENT_ID = "49ef02f611cf458e8a5dd8030cb5b7b9";
+const REDIRECT = `${window.location.origin}${window.location.pathname}`;
+const SCOPES = [
+    "streaming",
+    "user-modify-playback-state",
+    "user-read-playback-state",
+    "user-read-currently-playing",
+];
+const LOGIN_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT}&scope=${SCOPES.join(" ")}`;
+const LOGIN_WITH_DIALOG_URL = `${LOGIN_URL}&show_dialog=true`
+
 // Check for auth
 const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token")
 if (token === null) {
-    const CLIENT_ID = "49ef02f611cf458e8a5dd8030cb5b7b9";
-    const REDIRECT = `${window.location.origin}${window.location.pathname}`;
-    const SCOPES = [
-        // "app-remote-control",
-        "streaming",
-        "user-modify-playback-state",
-        "user-read-playback-state",
-        "user-read-currently-playing",
-        // "user-library-modify",
-    ];
-
-    window.location.replace(`https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${REDIRECT}&scope=${SCOPES.join(" ")}`)
+    window.location.replace(LOGIN_URL)
 } else {
     // Remove token from URL
     window.history.pushState({}, "", window.location.pathname)
@@ -48,8 +48,12 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     const searchResults = document.querySelector("#searchResults")
     const searchTitle = document.querySelector("#searchTitle")
 
+    // Get login screen elements
+    const loginButton = document.querySelector("#loginButton")
+
     // Get screen elements
     const loadingScreen = document.querySelector("#loadingScreen")
+    const loginScreen = document.querySelector("#loginScreen")
     const playerScreen = document.querySelector("#playerScreen")
     const searchScreen = document.querySelector("#searchScreen")
 
@@ -131,6 +135,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
     const showScreen = (screen) => {
         loadingScreen.style.display = screen == loadingScreen ? '' : 'none';
+        loginScreen.style.display = screen == loginScreen ? '' : 'none';
         playerScreen.style.display = screen == playerScreen ? '' : 'none';
         searchScreen.style.display = screen == searchScreen ? '' : 'none';
     };
@@ -171,20 +176,27 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     
     player.addListener("not_ready", ({ device_id }) => {
         console.info("Device ID has gone offline", device_id)
+        // Maybe loggin in again will help?
+        showScreen(loginScreen);
     })
     
     player.addListener("initialization_error", ({ message }) => {
         console.error(message)
+        // Maybe loggin in again will help?
+        showScreen(loginScreen);
     })
     
     player.addListener("authentication_error", ({ message }) => {
         console.error(message)
+        // Can't redirect here as we always get "Invalid scopes"...
+        // showScreen(loginScreen);
     })
     
     player.addListener("account_error", ({ message }) => {
-        console.error(message)
+        // User does not have premium account
+        showScreen(loginScreen);
     })
-    
+
     player.addListener("player_state_changed", (state) => {
         if (state.paused === true) {
             togglePlay.classList.remove('fa-pause');
@@ -302,4 +314,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             }
         })
     }
+
+    loginButton.addEventListener("click", () => {
+        window.location.replace(LOGIN_WITH_DIALOG_URL);
+    });
 }

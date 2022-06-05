@@ -15,8 +15,8 @@ Then load http://localhost:8000
 
 ## Todo
 * Bug: Sometimes next track doesn't move next
-* Check for premium account?
 * Add logout / change user
+* Add login screen (first time only)
 
 Later:
 * Guess
