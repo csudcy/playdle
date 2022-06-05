@@ -43,7 +43,7 @@ body {
   margin-bottom: 10px;
 }
 
-.loadingScreen {
+#loadingScreen {
   font-size: 10em;
 }
 
@@ -53,7 +53,7 @@ body {
   justify-content: center;
 }
 
-.trackName {
+#trackName {
   font-size: 16px;
   width: 310px;
   white-space: pre;
@@ -61,12 +61,12 @@ body {
   padding: 0 10px;
 }
 
-.trackImage {
+#trackImage {
   width: 300px;
   height: 300px;
 }
 
-.trackArtist {
+#trackArtist {
   font-size: 14px;
   width: 310px;
   white-space: pre;
@@ -112,11 +112,11 @@ body {
   position: absolute;
 }
 
-.progressEnabled {
+#progressEnabled {
   background-color: lightgrey;
 }
 
-.progressPosition {
+#progressPosition {
   background-color: lightgreen;
 }
 

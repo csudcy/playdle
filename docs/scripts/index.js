@@ -26,22 +26,22 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     // Get control elements
     const addTime = document.querySelector("#addTime")
     const nextTrack = document.querySelector("#nextTrack")
-    const progressEnabled = document.querySelector(".progressEnabled")
-    const progressPosition = document.querySelector(".progressPosition")
+    const progressEnabled = document.querySelector("#progressEnabled")
+    const progressPosition = document.querySelector("#progressPosition")
     const revealTrack = document.querySelector("#revealTrack")
     const togglePlay = document.querySelector("#togglePlay")
 
     // Get display elements
-    const trackArtist = document.querySelector(".trackArtist")
+    const trackArtist = document.querySelector("#trackArtist")
     const trackDuration = document.querySelector("#trackDuration")
-    const trackImage = document.querySelector(".trackImage")
-    const trackName = document.querySelector(".trackName")
+    const trackImage = document.querySelector("#trackImage")
+    const trackName = document.querySelector("#trackName")
     const trackPosition = document.querySelector("#trackPosition")
     const playlistName = document.querySelector("#playlistName")
 
     // Get screen elements
-    const loadingScreen = document.querySelector(".loadingScreen")
-    const playerScreen = document.querySelector(".playerScreen")
+    const loadingScreen = document.querySelector("#loadingScreen")
+    const playerScreen = document.querySelector("#playerScreen")
 
     // Game state
     const GAME_STATES = [

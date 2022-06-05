@@ -22,29 +22,29 @@
     <script src="https://kit.fontawesome.com/bca84fa23f.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="loadingScreen center">
+    <div id="loadingScreen" class="center">
         <i class="fa-solid fa-hourglass-empty"></i>
     </div>
 
-    <div class="playerScreen center" style="display: none;">
+    <div id="playerScreen" class="center" style="display: none;">
         <div>
-            <img style="opacity: 0;" class="trackImage" />
-            <div style="opacity: 0;" class="trackName">Name</div>
-            <div style="opacity: 0;" class="trackArtist">Artists</div>
+            <img id="trackImage" />
+            <div id="trackName">Name</div>
+            <div id="trackArtist">Artists</div>
         </div>
         <div class="time_update row">
             <div id="trackPosition">0:00</div>
             <div class="progressBar">
-                <div class="progressEnabled"></div>
-                <div class="progressPosition"></div>
+                <div id="progressEnabled"></div>
+                <div id="progressPosition"></div>
             </div>
             <div id="trackDuration">0:00</div>    
         </div>
         <div class="controls2 row">
-            <i class="button enabled fa-3x fa-solid fa-play" id="togglePlay"></i>
-            <i class="button enabled fa-3x fa-solid fa-plus" id="addTime"></i>
-            <i class="button enabled fa-3x fa-solid fa-eye" id="revealTrack"></i>
-            <i class="button enabled fa-3x fa-solid fa-forward" id="nextTrack"></i>
+            <i id="togglePlay" class="button enabled fa-3x fa-solid fa-play"></i>
+            <i id="addTime" class="button enabled fa-3x fa-solid fa-plus"></i>
+            <i id="revealTrack" class="button enabled fa-3x fa-solid fa-eye"></i>
+            <i id="nextTrack" class="button enabled fa-3x fa-solid fa-forward"></i>
         </div>
         <div>
             <i class="fa-1x fa-solid fa-list"></i>
