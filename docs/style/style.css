@@ -35,17 +35,18 @@ body {
   -moz-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
+  text-align: center;
+  line-height: 30px;
+}
+
+.loadingScreen {
+  font-size: 10em;
 }
 
 .row {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.player {
-  text-align: center;
-  line-height: 30px;
 }
 
 .trackName {

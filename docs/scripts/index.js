@@ -39,6 +39,10 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     const trackPosition = document.querySelector("#trackPosition")
     const playlistName = document.querySelector("#playlistName")
 
+    // Get screen elements
+    const loadingScreen = document.querySelector(".loadingScreen")
+    const playerScreen = document.querySelector(".playerScreen")
+
     // Game state
     const GAME_STATES = [
         0,
@@ -150,6 +154,9 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
         // Start the first game!
         nextTrackClick();
+
+        loadingScreen.style.display = 'none';
+        playerScreen.style.display = '';
     })
     
     player.addListener("not_ready", ({ device_id }) => {
