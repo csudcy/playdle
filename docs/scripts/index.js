@@ -105,15 +105,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         }
     }
     
-    const nextTrackClick = () => {
-        setGameState(0);
-        player.nextTrack().then(() => {
-            setTimeout(() => {
-                setGameState(1);
-            }, 400);
-        });
-    }
-
     const playFromStart = () => {
         player.getCurrentState().then(state => {
             if (state && state.paused) {
@@ -152,9 +143,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             })
         }, 200)
 
-        // Start the first game!
-        nextTrackClick();
-
+        // Show the game screen
+        setGameState(0);
         loadingScreen.style.display = 'none';
         playerScreen.style.display = '';
     })
@@ -184,11 +174,18 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             togglePlay.classList.add('fa-pause');
 
             const current_track = state.track_window.current_track;
-            trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
-            trackName.textContent = current_track.name
-            trackImage.src = current_track.album.images[2].url
-            track_duration = state.duration;
-            playlistName.textContent = state.context.metadata.name
+
+            if (trackName.textContent !== current_track.name) {
+                // Populate track data
+                trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
+                trackName.textContent = current_track.name
+                trackImage.src = current_track.album.images[2].url
+                track_duration = state.duration;
+                playlistName.textContent = state.context.metadata.name
+
+                // Start game
+                setGameState(1);
+            }
         }
     })
     player.connect()
@@ -198,7 +195,10 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         player.togglePlay()
     })
 
-    nextTrack.addEventListener("click", nextTrackClick);
+    nextTrack.addEventListener("click", () => {
+        setGameState(0);
+        player.nextTrack();
+    });
 
     addTime.addEventListener("click", () => {
         if (game_state < MAX_GAME_STATE) {
