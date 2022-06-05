@@ -71,6 +71,11 @@ body {
   color: #808080;
 }
 
+.time_update {
+  color: #bfbfbf;
+  font-size: 12px;
+}
+
 .controls {
   color: #bfbfbf;
 }
@@ -82,11 +87,6 @@ body {
   margin: 3px 10px;
   background-repeat: no-repeat; 
   opacity: 0.25;
-}
-
-.time_update {
-  color: #bfbfbf;
-  font-size: 12px;
 }
 
 .controls div.enabled {

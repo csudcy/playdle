@@ -37,6 +37,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     const trackImage = document.querySelector(".trackImage")
     const trackName = document.querySelector(".trackName")
     const trackPosition = document.querySelector("#trackPosition")
+    const playlistName = document.querySelector("#playlistName")
 
     // Game state
     const GAME_STATES = [
@@ -167,15 +168,17 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         console.error(message)
     })
     
-    player.addListener("player_state_changed", ({paused, duration, track_window: { current_track }}) => {
-        if (paused === true) {
+    player.addListener("player_state_changed", (state) => {
+        if (state.paused === true) {
             togglePlay.className = "play enabled"
         } else {
+            const current_track = state.track_window.current_track;
             togglePlay.className = "pause enabled"
             trackArtist.textContent = current_track.artists.map(artist => {return artist.name}).join(", ")
-            trackName.textContent = current_track["name"]
-            trackImage.src = current_track["album"]["images"][2]["url"]
-            track_duration = duration;
+            trackName.textContent = current_track.name
+            trackImage.src = current_track.album.images[2].url
+            track_duration = state.duration;
+            playlistName.textContent = state.context.metadata.name
         }
     })
     player.connect()
