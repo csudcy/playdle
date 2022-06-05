@@ -117,6 +117,10 @@ body {
   background-color: lightgreen;
 }
 
+#playlistName {
+  margin-left: 10px;
+}
+
 .tip {
   margin-top: 10px;
 }
