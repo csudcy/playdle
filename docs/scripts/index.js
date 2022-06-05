@@ -48,7 +48,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     const searchResults = document.querySelector("#searchResults")
     const searchTitle = document.querySelector("#searchTitle")
 
-    // Get login screen elements
+    // Get login related elements
+    const changeUser = document.querySelector("#changeUser")
     const loginButton = document.querySelector("#loginButton")
 
     // Get screen elements
@@ -316,6 +317,10 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     }
 
     loginButton.addEventListener("click", () => {
+        window.location.replace(LOGIN_WITH_DIALOG_URL);
+    });
+
+    changeUser.addEventListener("click", () => {
         window.location.replace(LOGIN_WITH_DIALOG_URL);
     });
 }

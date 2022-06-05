@@ -161,3 +161,9 @@ body {
 #loginButton {
   font-size: 2em;
 }
+
+#changeUser {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
