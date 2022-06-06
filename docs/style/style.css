@@ -3,13 +3,11 @@
   padding: 0;
   box-sizing: border-box;
   box-shadow: none;
-  user-select: none;
   border: none;
   outline: none;
   font-family: "normal";
   -webkit-tap-highlight-color: transparent;
   scrollbar-width: thin;
-  -webkit-user-select: none;
   -webkit-user-drag: none;
   -webkit-touch-callout: none;
   scroll-behavior: smooth;
@@ -95,10 +93,10 @@ body {
 }
 
 .button.solid {
-  background-color: #102710;
+  background-color: #141;
   border-radius: 10px;
   margin-bottom: 10px;
-  padding: 5px;
+  padding: 10px;
 }
 
 .button.enabled {
@@ -111,7 +109,7 @@ body {
 }
 
 .button.solid:hover {
-  background-color: #232;
+  background-color: #252;
 }
 
 .button.selected {
@@ -140,7 +138,14 @@ body {
 }
 
 #playlistName {
-  margin-left: 10px;
+  margin: 10px;
+}
+
+#searchInput {
+  font-size: 1.3em;
+  padding: 5px;
+  border-radius: 5px;
+  width: 30vw;
 }
 
 #searchResults {
@@ -156,6 +161,11 @@ body {
 #searchResults img {
   max-height: 64px;
   max-width: 64px;
+}
+
+#searchResults .button h3 {
+  padding: 0px 30px;
+  white-space: normal;
 }
 
 #loginButton {

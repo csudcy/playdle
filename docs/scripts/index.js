@@ -1,7 +1,5 @@
 import "https://sdk.scdn.co/spotify-player.js"
 
-window.navigator.standalone // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
-
 const CLIENT_ID = "49ef02f611cf458e8a5dd8030cb5b7b9";
 const REDIRECT = `${window.location.origin}${window.location.pathname}`;
 const SCOPES = [
